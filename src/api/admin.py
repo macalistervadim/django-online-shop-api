@@ -1,13 +1,18 @@
 from django.contrib import admin
+from src.api.models import Category, Product
 
-import src.api.models 
 
-
-@admin.register(src.api.models.Category)
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'product_count')
+    search_fields = ('name',)
+    list_filter = ('name',)
+    ordering = ('name',)
 
 
-@admin.register(src.api.models.Product)
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'category', 'price',)
+    search_fields = ('name', 'category__name')
+    list_filter = ('category',)
+    ordering = ('name',)
