@@ -22,8 +22,13 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class CartViewSet(viewsets.ViewSet):
+class CartViewSet(viewsets.ModelViewSet):
+    queryset = api_models.Cart.objects.all()
+    serializer_class = api_serializers.CartSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
 
     @action(detail=False, methods=["post"])
     def add(self, request):
@@ -43,7 +48,7 @@ class CartViewSet(viewsets.ViewSet):
             )
 
         cart_item, created = api_models.Cart.objects.get_or_create(
-            user=request.user, product=product,
+            user=request.user, product_id=product,
         )
         if not created:
             return Response(
