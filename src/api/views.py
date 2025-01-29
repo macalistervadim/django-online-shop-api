@@ -2,7 +2,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import action
 from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 
@@ -26,19 +25,18 @@ class CartViewSet(viewsets.ModelViewSet):
     queryset = api_models.Cart.objects.all()
     serializer_class = api_serializers.CartSerializer
     permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ["get", "post", "delete"]
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
-    @action(detail=False, methods=["post"])
-    def add(self, request):
+    def create(self, request):
         product_id = request.data.get("product_id")
         if not product_id:
             return Response(
                 {"error": "product_id is required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
         try:
             product = api_models.Product.objects.get(id=product_id)
         except api_models.Product.DoesNotExist:
@@ -46,7 +44,6 @@ class CartViewSet(viewsets.ModelViewSet):
                 {"error": "Product not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
         cart_item, created = api_models.Cart.objects.get_or_create(
             user=request.user, product_id=product,
         )
@@ -55,35 +52,24 @@ class CartViewSet(viewsets.ModelViewSet):
                 {"message": "Product already in cart"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
         return Response(
             {"message": "Product added to cart"},
             status=status.HTTP_201_CREATED,
         )
 
-    @action(detail=False, methods=["delete"])
-    def remove(self, request):
-        product_id = request.data.get("product_id")
-        if not product_id:
-            return Response(
-                {"error": "product_id is required"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+    def destroy(self, request, pk=None):
         try:
-            cart_item = api_models.Cart.objects.get(
-                user=request.user, product_id=product_id,
-            )
-            cart_item.delete()
-            return Response(
-                {"message": "Product removed from cart"},
-                status=status.HTTP_204_NO_CONTENT,
-            )
+            cart_item = api_models.Cart.objects.get(user=request.user, id=pk)
         except api_models.Cart.DoesNotExist:
             return Response(
-                {"error": "Product not found in cart"},
+                {"error": "Cart item not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+        cart_item.delete()
+        return Response(
+            {"message": "Cart item removed"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
 
 class OrderViewSet(viewsets.ModelViewSet):
