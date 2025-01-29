@@ -6,4 +6,4 @@ class ApiConfig(AppConfig):
     name = 'src.api'
 
     def ready(self):
-        import src.api.signals
+        import src.api.signals  # noqa: F401

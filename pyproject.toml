@@ -27,16 +27,10 @@ exclude = [
     "__init__.py",
     "apps.py",
 ]
-line-length = 88
+line-length = 79
 indent-width = 4
 
 [tool.ruff.lint]
-select = ["E", "W", "C", "F", "N"]
-ignore = [
-
-
-]
-
-# Allow fix for all enabled rules (when `--fix`) is provided.
+select = ["E", "W", "C", "F", "N", "COM"]
 fixable = ["ALL"]
 unfixable = []

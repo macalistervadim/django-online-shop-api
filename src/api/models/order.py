@@ -4,19 +4,21 @@ from django.contrib.auth.models import User
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'В ожидании'),
-        ('paid', 'Оплачено'),
-        ('delivered', 'Доставлено'),
+        ("pending", "В ожидании"),
+        ("paid", "Оплачено"),
+        ("delivered", "Доставлено"),
     ]
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='orders')
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+        User, on_delete=models.CASCADE, related_name="orders",
+    )
+    product = models.ForeignKey("Product", on_delete=models.CASCADE)
     quantity = models.IntegerField()
     order_date = models.DateTimeField(auto_now_add=True)
     delivery_date = models.DateTimeField()
     status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default='pending')
+        max_length=20, choices=STATUS_CHOICES, default="pending",
+    )
 
     def __str__(self):
         return f"{self.user.username}'s order - {self.product.name}"
