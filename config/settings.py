@@ -44,6 +44,25 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append("corsheaders")
+    MIDDLEWARE.insert(0, 'django.middleware.csrf.CsrfViewMiddleware')
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+    ]
+
+    INSTALLED_APPS.append('drf_yasg')
+    SWAGGER_SETTINGS = {
+        'SECURITY_DEFINITIONS': {
+            'Session': {
+                'type': 'apiKey',
+                'name': 'X-CSRFToken',
+                'in': 'header'
+            }
+        },
+    }
+
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES_DIRS = BASE_DIR / "templates"

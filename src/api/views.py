@@ -3,34 +3,29 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.decorators import action
-from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
-from rest_framework.views import csrf_exempt
 
 import src.api.models as api_models
 import src.api.serializers as api_serializers
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = api_models.Category.objects.all()
     serializer_class = api_serializers.CategorySerializer
     permission_classes = [permissions.AllowAny]
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = api_models.Product.objects.all()
     serializer_class = api_serializers.ProductSerializer
     permission_classes = [permissions.AllowAny]
 
 
-class CartViewSet(viewsets.ModelViewSet):
-    queryset = api_models.Cart.objects.all()
-    serializer_class = api_serializers.CartSerializer
-
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+class CartViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.IsAuthenticated]
 
     @action(detail=False, methods=['post'])
     def add(self, request):
@@ -43,22 +38,31 @@ class CartViewSet(viewsets.ModelViewSet):
         except api_models.Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        cart_item, created = api_models.Cart.objects.get_or_create(user=request.user, product=product)
+        cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
         if not created:
             return Response({'message': 'Product already in cart'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': 'Product added to cart'}, status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=['delete'])
-    def remove(self, request, pk=None):
-        cart_item = self.get_object()
-        cart_item.delete()
-        return Response({'message': 'Product removed from cart'}, status=status.HTTP_204_NO_CONTENT)
+    @action(detail=False, methods=['delete'])
+    def remove(self, request):
+        product_id = request.data.get('product_id')
+        if not product_id:
+            return Response({'error': 'product_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            cart_item = api_models.Cart.objects.get(user=request.user, product_id=product_id)
+            cart_item.delete()
+            return Response({'message': 'Product removed from cart'}, status=status.HTTP_204_NO_CONTENT)
+        except api_models.Cart.DoesNotExist:
+            return Response({'error': 'Product not found in cart'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = api_models.Order.objects.all()
     serializer_class = api_serializers.OrderSerializer
+    http_method_names = ['get', 'post']
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -88,21 +92,24 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@csrf_exempt
-def login_view(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            username = data.get('username')
-            password = data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                csrf_token = get_token(request)
-                return JsonResponse({'csrfToken': csrf_token}, status=200)
-            else:
-                return JsonResponse({'message': 'Invalid credentials'}, status=401)
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'Invalid JSON'}, status=400)
-    else:
-        return JsonResponse({'message': 'Method not allowed'}, status=405)
+class LoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = api_serializers.LoginSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        username = serializer.validated_data.get('username')
+        password = serializer.validated_data.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            csrf_token = get_token(request)
+            return Response({'csrfToken': csrf_token}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    def get_serializer(self):
+        return api_serializers.LoginSerializer()

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from src.api.models import Category, Product
+from src.api.models import Category, Product, Order
 
 
 @admin.register(Category)
@@ -16,3 +16,11 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'category__name')
     list_filter = ('category',)
     ordering = ('name',)
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product__name', 'order_date', 'status')
+    search_fields = ('user', 'order_date', 'status')
+    list_filter = ('status',)
+    ordering = ('status',)
