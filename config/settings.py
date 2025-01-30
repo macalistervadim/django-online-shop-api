@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-
 import dotenv
 
 dotenv.load_dotenv()
@@ -46,12 +45,30 @@ MIDDLEWARE = [
 
 if DEBUG:
     INSTALLED_APPS.append("corsheaders")
-    MIDDLEWARE.insert(0, "django.middleware.csrf.CsrfViewMiddleware")
+    INSTALLED_APPS.append("drf_yasg")
+
+    MIDDLEWARE.insert(0, "corsheaders.middleware.CorsMiddleware")
+
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
+    CSRF_TRUSTED_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
     ]
 
-    INSTALLED_APPS.append("drf_yasg")
+    CORS_ALLOW_CREDENTIALS = True
+    CORS_ALLOW_HEADERS = [
+        "content-type",
+        "authorization",
+        "x-csrftoken",
+        "accept",
+        "origin",
+        "user-agent",
+        "x-requested-with",
+    ]
+
     SWAGGER_SETTINGS = {
         "SECURITY_DEFINITIONS": {
             "Session": {
@@ -139,3 +156,9 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = None  # Поменять на "Lax" в продакшене
+CSRF_COOKIE_SAMESITE = None  # Поменять на "Lax" в продакшене
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False  # Поменять на True в продакшене

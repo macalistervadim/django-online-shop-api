@@ -212,7 +212,7 @@ version = "0.9.3"
 description = "An extremely fast Python linter and code formatter, written in Rust."
 optional = false
 python-versions = ">=3.7"
-groups = ["main", "dev"]
+groups = ["dev"]
 files = [
     {file = "ruff-0.9.3-py3-none-linux_armv6l.whl", hash = "sha256:7f39b879064c7d9670197d91124a75d118d00b0990586549949aae80cdc16624"},
     {file = "ruff-0.9.3-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:a187171e7c09efa4b4cc30ee5d0d55a8d6c5311b3e1b74ac5cb96cc89bafc43c"},
@@ -278,4 +278,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "ef3f9527a315faef3f61f3e78e8ac69100e3c2a576cd423efb1628315e41b988"
+content-hash = "e74e1659d3c2d71f10ae87b51d460caf81745252f09fe1b0317ba858485c065c"
