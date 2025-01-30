@@ -1,5 +1,25 @@
 [
 {
+  "model": "api.category",
+  "pk": 1,
+  "fields": {
+    "name": "cat1",
+    "product_count": 1,
+    "image": "categories/repository-open-graph-template.png"
+  }
+},
+{
+  "model": "api.product",
+  "pk": 1,
+  "fields": {
+    "name": "prod1",
+    "description": "prod1blabla",
+    "price": "213.00",
+    "category": 1,
+    "image": "products/repository-open-graph-template.png"
+  }
+},
+{
   "model": "api.feedback",
   "pk": 1,
   "fields": {
@@ -85,6 +105,32 @@
     "email": "mail@mail.ru",
     "message": "mdfsfd",
     "created_at": "2025-01-30T11:05:36.686Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2025-01-30T11:22:06.325Z",
+    "user": 1,
+    "content_type": 1,
+    "object_id": "1",
+    "object_repr": "cat1",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2025-01-30T11:22:15.865Z",
+    "user": 1,
+    "content_type": 2,
+    "object_id": "1",
+    "object_repr": "prod1",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
   }
 },
 {

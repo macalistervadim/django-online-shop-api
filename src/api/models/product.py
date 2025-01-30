@@ -8,6 +8,7 @@ class Product(models.Model):
     category = models.ForeignKey(
         "Category", on_delete=models.CASCADE, related_name="products",
     )
+    image = models.ImageField(upload_to="products/")
 
     def __str__(self):
         return self.name
