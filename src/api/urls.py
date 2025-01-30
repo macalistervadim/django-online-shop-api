@@ -5,8 +5,9 @@ import src.api.views as views
 
 
 router = DefaultRouter()
-router.register(r"categories", views.CategoryViewSet)
-router.register(r"products", views.ProductViewSet)
+router.register(r"categories", views.CategoryViewSet, basename="categories")
+router.register(r"products", views.ProductViewSet, basename="products")
+router.register(r"feedbacks", views.FeedbackViewSet, basename="feedbacks")
 router.register(r"orders", views.OrderViewSet, basename="orders")
 
 urlpatterns = [

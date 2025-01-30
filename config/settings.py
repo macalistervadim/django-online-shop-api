@@ -109,7 +109,7 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': 'database',
         'PORT': '5432',
-    }
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [

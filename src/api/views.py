@@ -161,3 +161,23 @@ class LoginView(APIView):
                 {"message": "Invalid credentials"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
+
+class FeedbackViewSet(viewsets.ModelViewSet):
+    queryset = api_models.Feedback.objects.all()
+    serializer_class = api_serializers.FeedbackSerializer
+    permission_classes = [permissions.AllowAny]
+    http_method_names = ["post"]
+
+    def create(self, request):
+        serializer = api_serializers.FeedbackSerializer(
+            data=request.data, context={"request": request},
+        )
+        if not serializer.is_valid():
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(
+            {"message": "Feedback created"},
+            status=status.HTTP_201_CREATED,
+        )

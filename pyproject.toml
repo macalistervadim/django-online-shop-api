@@ -22,7 +22,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 exclude = [
-    "migrations/",
+    "*/migrations/*",
     "venv/",
     "__init__.py",
     "apps.py",
