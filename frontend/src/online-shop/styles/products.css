@@ -1,0 +1,132 @@
+.products {
+
+}
+
+.products-blok {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.products-blok__section {
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    width: 300px;
+}
+
+.products-blok__section__image {
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.products-blok__section img {
+    width: 300px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    transition: 1s;
+    cursor: pointer;
+}
+
+.products-blok__section img:hover {
+    transform: scale(1.1);
+}
+
+.products-blok__section a {
+    text-decoration: none;
+}
+
+.products-blok__section a h2 {
+    color: var(--main-color);
+    transition: .5s;
+    cursor: pointer;
+}
+
+.products-blok__section a h2:hover {
+    opacity: .7;
+}
+
+.products-blok__container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.products-blok__container__section {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    align-items: center;
+}
+
+.products-blok__container__section__icon {
+    color: var(--text-color);
+}
+
+.products-blok__container__section p {
+    color: var(--text-color)
+}
+
+.products-blok__container__section p span {
+    background-color: yellow;
+    color: #000;
+    padding: 0 5px;
+}
+
+@media (max-width: 1116px) {
+    .products-blok {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-blok {
+        gap: 15px;
+    }
+    
+    .products-blok__section {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 568px) {
+    .products-blok__section {
+        border-radius: 20px;
+        background-color: #fff;
+        width: 160px;
+    }
+
+    .products-blok__section__image {
+        border-radius: 0;
+    }
+    
+    .products-blok__section img {
+        width: 150px;
+        height: 75px;
+        object-fit: cover;
+        margin-bottom: 10px;
+        border-radius: 0;
+        transition: 1s;
+        cursor: pointer;
+    }
+
+    .products-blok__section h2 {
+        font-size: 100%;
+    }
+
+    .products-blok__container__section p {
+        font-size: 70%;
+        color: #424242;
+    }
+    .products-blok__container__section {
+        gap: 5px;
+    }
+}

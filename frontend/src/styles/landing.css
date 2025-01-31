@@ -1,0 +1,152 @@
+.landing {
+    height: 100vh;
+    color: #426978;
+}
+
+.landing button:hover {
+    opacity: .7;
+}
+
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    padding: 0 100px;
+}
+
+.landing-header img {
+    width: 150px;
+    height: 100px;
+}
+
+.landing-header__login {
+    font-size: 110%;
+    padding: 15px 35px;
+    background-color: var(--blue-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+    transition: .5s;
+    cursor: pointer;
+}
+
+.landing-header__login:hover {
+    opacity: .7;
+}
+
+.landing-blok {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 70.6vh;
+    padding: 0 100px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.423), rgba(0, 0, 0, 0.423)), url('/public/images/blok.jpg');
+    background-size: cover;
+}
+
+.landing a {
+    text-decoration: none;
+}
+
+.landing-blok button {
+    width: 200px;
+    padding: 10px 20px;
+    background-color: var(--blue-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+    font-size: 110%;
+}
+
+.landing-blok h1 {
+    font-size: 350%;
+    color: #fff;
+}
+
+.landing-blok p {
+    font-size: 110%;
+    color: var(--landing-color);
+    margin-bottom: 30px;
+}
+
+.landing-footer {
+    height: 15vh;
+    background-color: var(--bg-white-color);
+    background-position: top;
+    text-align: center;
+}
+
+.landing-footer__container {
+    padding: 0 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.landing-footer__container__container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.landing-footer__container__container a {
+    text-decoration: none;
+    color: #426978;
+    transition: .5s;
+    cursor: pointer;
+}
+
+.landing-footer__container__container a:hover {
+    opacity: .7;
+}
+
+.landing-footer__p1 {
+    font-size: 120%;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.landing-footer__p2 a {
+    text-decoration: none;
+    color: #426978;
+    transition: .5s;
+    cursor: pointer;
+    margin-bottom: 5px;
+    font-size: 95%;
+}
+
+.landing-footer__p2 a:hover {
+    opacity: .7;
+}
+
+@media (max-width: 768px) {
+
+    .landing-header { 
+        padding: 0 20px;
+    }
+
+    .landing-footer__container {
+        padding: 0 20px;
+    }
+
+    .landing-blok {
+        padding: 0 20px;
+        align-items: center;
+    }
+
+    .landing-blok h1 {
+        font-size: 180%;
+        color: #fff;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .landing-blok p {
+        text-align: center;
+        font-size: 80%;
+    }
+}

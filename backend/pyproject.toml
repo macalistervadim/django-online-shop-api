@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "django-online-shop-api"
+version = "0.1.0"
+description = ""
+authors = ["macalistervadim <macalistervadim@yandex.ru>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1.5"
+python-dotenv = "^1.0.1"
+djangorestframework = "^3.15.2"
+django-cors-headers = "^4.6.0"
+drf-yasg = "^1.21.8"
+psycopg2-binary = "^2.9.10"
+pillow = "^11.1.0"
+gunicorn = "^23.0.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+exclude = [
+    "*/migrations/*",
+    "venv/",
+    "__init__.py",
+    "apps.py",
+]
+line-length = 79
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["E", "W", "C", "F", "N", "COM"]
+fixable = ["ALL"]
+unfixable = []

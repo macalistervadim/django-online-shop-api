@@ -1,0 +1,42 @@
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    color: var(--main-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    text-align: center;
+    font-size: 16px;
+    animation: fadeOut 3s forwards;
+}
+
+.notification-bar {
+    height: 3px;
+    background-color: #2e7d32;
+    margin-top: 20px;
+    animation: shrinkBar 2s linear forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes shrinkBar {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+    }
+}
