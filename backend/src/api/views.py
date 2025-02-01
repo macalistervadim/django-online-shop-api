@@ -1,11 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from django.contrib.auth import authenticate, login
-from django.middleware.csrf import get_token
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 
 import src.api.models as api_models
 import src.api.serializers as api_serializers
@@ -116,50 +111,6 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(
                 {"error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class LoginView(APIView):
-    permission_classes = [permissions.AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        serializer = api_serializers.LoginSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        username = serializer.validated_data.get("username")
-        password = serializer.validated_data.get("password")
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            request.session.save()
-
-            csrf_token = get_token(request)
-
-            response = Response(
-                {"message": "Login successful"},
-                status=status.HTTP_200_OK,
-            )
-            response.set_cookie(
-                "sessionid",
-                request.session.session_key,
-                httponly=True,
-                samesite="Lax",
-            )
-            response.set_cookie(
-                "csrftoken",
-                csrf_token, httponly=False,
-                samesite="Lax",
-            )
-
-            return response
-        else:
-            return Response(
-                {"message": "Invalid credentials"},
-                status=status.HTTP_401_UNAUTHORIZED,
             )
 
 

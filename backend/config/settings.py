@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 import sys
 from pathlib import Path
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
 ]
 
 MIDDLEWARE = [
@@ -53,7 +55,6 @@ if DEBUG:
 
     MIDDLEWARE.insert(0, "corsheaders.middleware.CorsMiddleware")
 
-    # Укажите разрешенные источники для CORS
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
         "https://localhost:3000",
@@ -63,7 +64,6 @@ if DEBUG:
         "https://localhost",
     ]
 
-    # Доверенные источники для CSRF
     CSRF_TRUSTED_ORIGINS = [
         "http://localhost:3000",
         "htts://localhost:3000",
@@ -73,7 +73,6 @@ if DEBUG:
         "https://localhost",
     ]
 
-    # Разрешенные заголовки для CORS
     CORS_ALLOW_CREDENTIALS = True
     CORS_ALLOW_HEADERS = [
         "content-type",
@@ -85,7 +84,6 @@ if DEBUG:
         "x-requested-with",
     ]
 
-    # Настройка безопасности для Swagger
     SWAGGER_SETTINGS = {
         "SECURITY_DEFINITIONS": {
             "Session": {
@@ -153,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -183,3 +181,12 @@ CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=3),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+}
