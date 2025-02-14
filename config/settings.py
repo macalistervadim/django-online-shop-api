@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'database',
+        'HOST': '188.225.82.103',
         'PORT': '5432',
     },
 }
@@ -137,11 +137,11 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-STATIC_ROOT = "/app/staticfiles"
+STATIC_ROOT = "/var/django/django-online-shop-api/staticfiles"
 STATICFILES_DIRS = []
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = "/app/media"
+MEDIA_ROOT = "/var/django/django-online-shop-api/media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -177,6 +177,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:3000",
     "http://localhost",
     "https://localhost",
+    "https://langheinrich.netlify.app/",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -187,6 +188,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://127.0.0.1:3000",
     "http://localhost",
     "https://localhost",
+    "https://langheinrich.netlify.app/",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
