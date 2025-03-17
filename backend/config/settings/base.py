@@ -35,13 +35,14 @@ ALLOWED_HOSTS = load_list("DJANGO_ALLOWED_HOSTS", "*")
 
 INSTALLED_APPS = [
     "backend.api.v1.apps.ApiConfig",
+    "unfold",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
     "daphne",
+    "django.contrib.staticfiles",
     "channels",
     "rest_framework",
     "rest_framework_simplejwt",
@@ -89,8 +90,8 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST", "database"),
-        "PORT": os.getenv("POSTGRES_PORT", "5432"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
     },
 }
 

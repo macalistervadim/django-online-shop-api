@@ -8,7 +8,7 @@ from django.core.asgi import get_asgi_application
 
 settings_module = os.getenv(
     "DJANGO_SETTINGS_MODULE",
-    "backend.config.settings.development",
+    "backend.config.settings.dev",
 )
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_module)
 django_asgi_app = get_asgi_application()

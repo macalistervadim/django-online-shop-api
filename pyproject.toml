@@ -21,6 +21,7 @@ django-debug-toolbar = "^5.0.1"
 channels = "^4.2.0"
 daphne = "^4.1.2"
 channels-redis = "^4.2.1"
+django-unfold = "^0.51.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.9.3"
