@@ -9,8 +9,7 @@ from unfold.forms import (
     UserCreationForm,
 )
 
-from backend.api.v1.models import Category, Product
-from backend.api.v1.models.feedback import Feedback
+from backend.api.v1.models import Category, Chat, Feedback, Product
 
 
 @admin.register(Category)
@@ -19,6 +18,15 @@ class CategoryAdmin(ModelAdmin):
     search_fields = ("name",)
     list_filter = ("name",)
     ordering = ("name",)
+
+
+@admin.register(Chat)
+class ChatAdmin(ModelAdmin):
+    list_display = ("product", "customer")
+    search_fields = ("customer", "created_at")
+    list_filter = ("created_at", "customer")
+    ordering = ("created_at", "customer")
+    readonly_fields = ("product", "customer")
 
 
 @admin.register(Product)
