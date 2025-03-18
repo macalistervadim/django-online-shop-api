@@ -14,3 +14,13 @@ class Feedback(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} - {self.phone}"
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}("
+            f"name={self.name!r}, "
+            f"phone={self.phone!r}, "
+            f"email={self.email!r}, "
+            f"message={self.message!r}, "
+            f"created_at={self.created_at!r})"
+        )
