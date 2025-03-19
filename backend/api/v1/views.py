@@ -14,6 +14,18 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
+class NewsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = api_models.News.objects.all()
+    serializer_class = api_serializers.NewsSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class FaireViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = api_models.Faire.objects.all()
+    serializer_class = api_serializers.FaireSerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = api_models.Product.objects.all()
     serializer_class = api_serializers.ProductSerializer
@@ -29,7 +41,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     )
     def chat(self, request: Request, pk: int | None = None) -> Response:
         """
-        При вызове этого экшена (POST /v1/products/<pk>/chat/) возвращается
+        При вызове этого экшена (POST /products/<pk>/chat/) возвращается
         чат для продукта.
         Если чат ещё не создан – он создаётся.
         """

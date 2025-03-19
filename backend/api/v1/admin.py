@@ -9,7 +9,48 @@ from unfold.forms import (
     UserCreationForm,
 )
 
-from backend.api.v1.models import Category, Chat, Feedback, Product
+from backend.api.v1.models import (
+    Category,
+    Chat,
+    Faire,
+    FaireCategory,
+    Feedback,
+    News,
+    NewsCategory,
+    Product,
+)
+
+
+@admin.register(NewsCategory)
+class NewsCategoryAdmin(ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+    ordering = ("-name",)
+    list_filter = ("name",)
+
+
+@admin.register(News)
+class NewsAdmin(ModelAdmin):
+    list_display = ("title", "author")
+    search_fields = ("author", "created_at", "title")
+    ordering = ("-created_at",)
+    list_filter = ("author", "created_at")
+
+
+@admin.register(FaireCategory)
+class FaireCategoryAdmin(ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+    ordering = ("-name",)
+    list_filter = ("name",)
+
+
+@admin.register(Faire)
+class FaireAdmin(ModelAdmin):
+    list_display = ("title", "author")
+    search_fields = ("author", "created_at", "title")
+    ordering = ("-created_at",)
+    list_filter = ("author", "created_at")
 
 
 @admin.register(Category)

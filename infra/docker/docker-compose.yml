@@ -1,9 +1,10 @@
 services:
-  backend:
+  gunicorn:
     build: ../..
     working_dir: /app
     volumes:
-      - ./staticfiles:/app/src/staticfiles
+      - ./staticfiles:/app/backend/src/staticfiles
+      - ./media:/app/backend/src/media
     ports:
       - "8000:8000"
     networks:
@@ -12,6 +13,19 @@ services:
       - ../../.env.prod
     command: ["gunicorn", "src.config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120"]
 
+  daphne:
+    build: ../..
+    working_dir: /app
+    ports:
+      - "8001:8001"
+    networks:
+      - app_network
+    env_file:
+      - ../../.env.prod
+    command: [ "daphne", "-b", "0.0.0.0", "-p", "8001", "src.config.asgi:application" ]
+    depends_on:
+      - redis
+
   nginx:
     image: nginx:alpine
     ports:
@@ -19,15 +33,16 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./staticfiles:/app/src/staticfiles
-      - ./media:/app/src/media
+      - ./staticfiles:/app/backend/src/staticfiles
+      - ./media:/app/backend/src/media
       - ./certs:/etc/letsencrypt:ro
       - ./certbot-www:/var/www/suncov/certbot
     depends_on:
-      - backend
+      - gunicorn
+      - daphne
     networks:
       - app_network
-    
+
   certbot:
     image: certbot/certbot
     container_name: certbot
@@ -35,6 +50,25 @@ services:
       - ./certs:/etc/letsencrypt
       - ./certbot-www:/var/www/suncov/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - app_network
+
+  database:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: always
+    env_file:
+      - ../../.env
+    networks:
+      - app_network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
     networks:
       - app_network
 

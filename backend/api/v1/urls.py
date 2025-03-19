@@ -12,6 +12,8 @@ router = DefaultRouter()
 router.register(r"categories", views.CategoryViewSet, basename="categories")
 router.register(r"products", views.ProductViewSet, basename="products")
 router.register(r"feedbacks", views.FeedbackViewSet, basename="feedbacks")
+router.register(r"faire", views.FaireViewSet, basename="faire")
+router.register(r"news", views.NewsViewSet, basename="news")
 
 urlpatterns = [
     path("", include(router.urls)),
