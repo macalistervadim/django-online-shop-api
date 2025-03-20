@@ -51,11 +51,11 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /var/www/api/django-online-shop-api/infra/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./staticfiles:/app/backend/src/staticfiles
-      - ./media:/app/backend/src/media
-      - ./certs:/etc/letsencrypt:ro
-      - ./certbot-www:/var/www/api/django-online-shop-api/certbot
+      - /var/www/api/django-online-shop-api/infra/nginx/online-shop.conf:/etc/nginx/conf.d/online-shop.conf
+      - /var/www/api/django-online-shop-api/infra/docker/staticfiles:/app/backend/src/staticfiles
+      - /var/www/api/django-online-shop-api/infra/docker/media:/app/backend/src/media
+      - /var/www/api/django-online-shop-api/infra/docker/certs:/etc/letsencrypt:ro
+      - /var/www/api/django-online-shop-api/certbot-www:/var/www/api/django-online-shop-api/certbot
     depends_on:
       - gunicorn
       - daphne
@@ -66,8 +66,8 @@ services:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./certs:/etc/letsencrypt
-      - ./certbot-www:/var/www/api/django-online-shop-api/certbot
+      - /var/www/api/django-online-shop-api/infra/docker/certs:/etc/letsencrypt
+      - /var/www/api/django-online-shop-api/certbot-www:/var/www/api/django-online-shop-api/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
       - app_network

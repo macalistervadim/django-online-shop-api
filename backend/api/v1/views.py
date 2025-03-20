@@ -50,7 +50,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         """
         product = self.get_object()
 
-        # Проверка, что у пользователя есть ID, и передаем его
         customer_id = (
             request.user.id if request.user.is_authenticated else None
         )
@@ -63,7 +62,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
         chat, created = api_models.Chat.objects.get_or_create(
             product=product,
-            customer_id=customer_id,  # Передаем customer_id
+            customer_id=customer_id,
         )
 
         return Response(
