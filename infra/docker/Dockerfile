@@ -13,8 +13,7 @@ RUN pip install --no-cache-dir poetry
 
 COPY ../../pyproject.toml poetry.lock /app/
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-root
+RUN poetry install --no-root
 
 # Stage 2: Production
 FROM python:3.12-slim
@@ -29,4 +28,4 @@ COPY ../.. /app/
 
 EXPOSE 8000
 
-CMD ["gunicorn", "backend.config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+CMD ["gunicorn", "backend.config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2"]

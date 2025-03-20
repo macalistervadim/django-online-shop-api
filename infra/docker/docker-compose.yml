@@ -1,7 +1,9 @@
 services:
   gunicorn:
-    build: ../..
-    working_dir: /app
+    build:
+      context: ../../
+      dockerfile: infra/docker/Dockerfile
+    working_dir: /app/backend
     volumes:
       - ./staticfiles:/app/backend/src/staticfiles
       - ./media:/app/backend/src/media
@@ -11,20 +13,37 @@ services:
       - app_network
     env_file:
       - ../../.env.prod
-    command: ["gunicorn", "src.config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120"]
+    command: >
+      bash -c "
+        export PYTHONPATH=/app &&
+        poetry install --no-root &&
+        poetry run python manage.py makemigrations &&
+        poetry run python manage.py migrate &&
+        poetry run gunicorn backend.config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
+      "
 
   daphne:
-    build: ../..
-    working_dir: /app
+    build:
+      context: ../../
+      dockerfile: infra/docker/Dockerfile
+    working_dir: /app/backend
     ports:
       - "8001:8001"
     networks:
       - app_network
     env_file:
       - ../../.env.prod
-    command: [ "daphne", "-b", "0.0.0.0", "-p", "8001", "src.config.asgi:application" ]
+    command: >
+      bash -c "
+        export PYTHONPATH=/app &&
+        poetry install --no-root &&
+        poetry run python manage.py makemigrations &&
+        poetry run python manage.py migrate &&
+        poetry run daphne -b 0.0.0.0 -p 8001 backend.config.asgi:application
+      "
     depends_on:
       - redis
+      - database
 
   nginx:
     image: nginx:alpine
@@ -32,11 +51,11 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /var/www/api/django-online-shop-api/infra/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./staticfiles:/app/backend/src/staticfiles
       - ./media:/app/backend/src/media
       - ./certs:/etc/letsencrypt:ro
-      - ./certbot-www:/var/www/suncov/certbot
+      - ./certbot-www:/var/www/api/django-online-shop-api/certbot
     depends_on:
       - gunicorn
       - daphne
@@ -48,7 +67,7 @@ services:
     container_name: certbot
     volumes:
       - ./certs:/etc/letsencrypt
-      - ./certbot-www:/var/www/suncov/certbot
+      - ./certbot-www:/var/www/api/django-online-shop-api/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
       - app_network
@@ -61,7 +80,7 @@ services:
       - "5433:5432"
     restart: always
     env_file:
-      - ../../.env
+      - ../../.env.prod
     networks:
       - app_network
 
@@ -75,3 +94,6 @@ services:
 networks:
   app_network:
     driver: bridge
+
+volumes:
+  postgres_data:

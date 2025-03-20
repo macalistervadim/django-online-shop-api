@@ -7,4 +7,5 @@ class ApiConfig(AppConfig):
     verbose_name = "Api"
 
     def ready(self) -> None:
+        import backend.api.v1.models  # noqa: F401
         import backend.api.v1.signals  # noqa: F401
