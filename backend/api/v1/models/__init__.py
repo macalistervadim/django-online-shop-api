@@ -4,6 +4,7 @@ from backend.api.v1.models.product import Product
 from backend.api.v1.models.chat import Chat, Message
 from backend.api.v1.models.faire import Faire, FaireCategory
 from backend.api.v1.models.news import News, NewsCategory
+from backend.api.v1.models.favorites import Favorites
 
 __all__ = [
     "Category",
@@ -15,4 +16,5 @@ __all__ = [
     "FaireCategory",
     "NewsCategory",
     "News",
+    "Favorites",
 ]

@@ -21,6 +21,12 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "phone", "email", "message", "created_at"]
 
 
+class FavoritesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = api_models.Favorites
+        fields = ["id", "user", "product", "created_at"]
+
+
 class NewsSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(read_only=True, slug_field="name")
     author = serializers.SlugRelatedField(

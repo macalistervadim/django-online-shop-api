@@ -14,6 +14,7 @@ router.register(r"products", views.ProductViewSet, basename="products")
 router.register(r"feedbacks", views.FeedbackViewSet, basename="feedbacks")
 router.register(r"faire", views.FaireViewSet, basename="faire")
 router.register(r"news", views.NewsViewSet, basename="news")
+router.register(r"favorites", views.FavoritesViewSet, basename="favorites")
 
 urlpatterns = [
     path("", include(router.urls)),
