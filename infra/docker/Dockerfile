@@ -1,4 +1,4 @@
-# Stage 1: Build (Poetry, зависимости)
+# Stage 1: Build
 FROM python:3.12-slim as builder
 
 WORKDIR /app
@@ -9,11 +9,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN msguniq --version
 
-RUN pip install --no-cache-dir poetry
+RUN pip install --no-cache-dir uv
 
-COPY ../../pyproject.toml poetry.lock /app/
+COPY ../../pyproject.toml /app/
 
-RUN poetry install --no-root
+RUN uv venv /app/.venv && \
+    uv pip install ".[dev]"
 
 # Stage 2: Production
 FROM python:3.12-slim
@@ -21,11 +22,15 @@ FROM python:3.12-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends locales gettext && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir uv
 
-COPY --from=builder /usr/local /usr/local
+COPY --from=builder /app/.venv /app/.venv
 COPY ../.. /app/
+
+ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONPATH=/app
 
 EXPOSE 8000
 
-CMD ["gunicorn", "backend.config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2"]
+CMD ["uv", "run", "gunicorn", "backend.config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2"]

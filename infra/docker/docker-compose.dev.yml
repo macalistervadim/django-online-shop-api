@@ -14,14 +14,15 @@ services:
       - ../../.env
     command: >
       bash -c "
-        export PYTHONPATH=/app &&
-        poetry install --no-root &&
-        poetry run ruff check &&
-        poetry run mypy api/ &&
-        poetry run python manage.py makemigrations &&
-        poetry run python manage.py migrate &&
-        poetry run python manage.py test &&
-        poetry run python manage.py runserver 0.0.0.0:8000
+        cd /app &&
+        uv pip install -e '.[dev]' &&
+        cd backend &&
+        uv run ruff check &&
+        uv run mypy api/ &&
+        uv run python manage.py makemigrations &&
+        uv run python manage.py migrate &&
+        uv run python manage.py test &&
+        uv run python manage.py runserver 0.0.0.0:8000
       "
     depends_on:
       - redis

@@ -15,11 +15,10 @@ services:
       - ../../.env.prod
     command: >
       bash -c "
-        export PYTHONPATH=/app &&
-        poetry install --no-root &&
-        poetry run python manage.py makemigrations &&
-        poetry run python manage.py migrate &&
-        poetry run gunicorn backend.config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
+        cd /app &&
+        uv pip install -e . &&
+        cd backend &&
+        uv run gunicorn backend.config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
       "
 
   daphne:
@@ -35,11 +34,10 @@ services:
       - ../../.env.prod
     command: >
       bash -c "
-        export PYTHONPATH=/app &&
-        poetry install --no-root &&
-        poetry run python manage.py makemigrations &&
-        poetry run python manage.py migrate &&
-        poetry run daphne -b 0.0.0.0 -p 8001 backend.config.asgi:application
+        cd /app &&
+        uv pip install -e . &&
+        cd backend &&
+        uv run daphne -b 0.0.0.0 -p 8001 backend.config.asgi:application
       "
     depends_on:
       - redis
